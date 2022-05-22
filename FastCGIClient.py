@@ -181,6 +181,8 @@ class FastCGIClient:
                 self.requests['error'] += response['content'].decode('utf-8','ignore')
             if response['type'] == FastCGIClient.__FCGI_TYPE_STDOUT:
                 self.requests[requestId]['response'] += response['content'].decode('utf-8','ignore')
+            else:
+                raise Exception('unkown response record type: %r' % response['type'])
         return self.requests[requestId]['response']
 
     def __repr__(self):
