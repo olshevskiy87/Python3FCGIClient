@@ -24,7 +24,7 @@ class FastCGIClient:
     __FCGI_TYPE_DATA = 8
     __FCGI_TYPE_GETVALUES = 9
     __FCGI_TYPE_GETVALUES_RESULT = 10
-    __FCGI_TYPE_UNKOWNTYPE = 11
+    __FCGI_TYPE_UNKNOWNTYPE = 11
 
     __FCGI_HEADER_SIZE = 8
 
@@ -194,7 +194,7 @@ class FastCGIClient:
             if response['type'] == FastCGIClient.__FCGI_TYPE_STDOUT:
                 self.requests[requestId]['response'] += response['content'].decode('utf-8','ignore')
             else:
-                raise Exception('unkown response record type: %r' % response['type'])
+                raise Exception('unknown response record type: %r' % response['type'])
         return self.requests[requestId]['response']
 
     def __repr__(self):
