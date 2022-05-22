@@ -119,8 +119,9 @@ class FastCGIClient:
             content = bytearray()
             if 'contentLength' in record.keys():
                 contentLength = record['contentLength']
-                buffer = self.sock.recv(contentLength)
+                buffer = ' '
                 while contentLength and buffer:
+                    buffer = self.sock.recv(contentLength)
                     contentLength -= len(buffer)
                     content += buffer
             record['content'] = bytes(content)
