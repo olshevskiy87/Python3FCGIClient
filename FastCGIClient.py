@@ -28,6 +28,8 @@ class FastCGIClient:
 
     __FCGI_HEADER_SIZE = 8
 
+    __FCGI_MAX_CONTENT_SIZE = 65535
+
     # request state
     FCGI_STATE_SEND = 1
     FCGI_STATE_ERROR = 2
@@ -152,7 +154,17 @@ class FastCGIClient:
         request += self.__encodeFastCGIRecord(FastCGIClient.__FCGI_TYPE_PARAMS, b'', requestId)
 
         if post:
-            request += self.__encodeFastCGIRecord(FastCGIClient.__FCGI_TYPE_STDIN, post, requestId)
+            post_len = len(post)
+            offset_from = 0
+            while offset_from < post_len:
+                offset_to = offset_from + self.__FCGI_MAX_CONTENT_SIZE
+                request += self.__encodeFastCGIRecord(
+                    FastCGIClient.__FCGI_TYPE_STDIN,
+                    post[offset_from:offset_to],
+                    requestId
+                )
+                offset_from = offset_to
+
         request += self.__encodeFastCGIRecord(FastCGIClient.__FCGI_TYPE_STDIN, b'', requestId)
 
         self.sock.send(request)
